@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
@@ -20,6 +22,7 @@ namespace Crud.API
 {
     public class Startup
     {
+        public const string AllowCrudOrigins = "AllowCrudPolicy";
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -32,14 +35,38 @@ namespace Crud.API
         {
             services.AddMvc()
                 .AddXmlSerializerFormatters()
-                .AddJsonOptions(o => o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver())
+                .AddJsonOptions(options =>
+                {
+                    JsonSerializerSettings settings = options.SerializerSettings;
+                    settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    settings.Formatting = Formatting.None;
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
             string connectionString = Configuration.GetConnectionString("CrudConnection");
             DataDirectoryConfig.SetDataDirectoryPath(ref connectionString);
-            services.AddDbContext<CrudContext>(o => o.UseSqlServer(connectionString));
+
+            services.AddDbContext<CrudContext>(options => options.UseSqlServer(connectionString));
+
             MapperConfiguration mapperConfiguration = MapperStart.Start();
             IMapper mapper = mapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(AllowCrudOrigins, builder =>
+                {
+                    builder.WithOrigins("http://localhost:11500",
+                                        "https://localhost:11500")
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .WithMethods("GET", "POST", "PUT", "DELETE")
+                        .WithHeaders(HeaderNames.Origin,
+                                     HeaderNames.ContentType,
+                                     HeaderNames.Accept);
+                });
+            });
+
             AutofacServiceProvider serviceProvider = AutofacProvider.Provider(services);
 
             return serviceProvider;
@@ -57,8 +84,7 @@ namespace Crud.API
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            app.UseCors();
+            app.UseCors(AllowCrudOrigins);
             // app.UseHttpsRedirection();
             app.UseMvc();
         }

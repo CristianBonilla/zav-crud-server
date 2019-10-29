@@ -8,7 +8,7 @@ namespace Crud.API
         public CrudProfile()
         {
             CreateMap<VisitaEntity, VisitaEntity>()
-               // .IgnoreAllUnmapped()
+                // .IgnoreAllUnmapped()
                 .ReverseMap();
             CreateMap<VisitaModel, VisitaEntity>()
                 .ForMember(d => d.Id, m => m.Ignore())
