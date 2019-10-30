@@ -83,7 +83,7 @@ namespace Crud.Infrastructure
                 querySet = querySet.Include(expression);
             var queryableEntity = orderBy != null ? orderBy(querySet) : querySet;
 
-            return queryableEntity;
+            return queryableEntity.ToList();
         }
     }
 }

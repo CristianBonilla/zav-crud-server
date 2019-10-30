@@ -22,7 +22,7 @@ namespace Crud.API
 {
     public class Startup
     {
-        public const string AllowCrudOrigins = "AllowCrudPolicy";
+        const string AllowCrudOrigins = "AllowCrudPolicy";
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -35,13 +35,7 @@ namespace Crud.API
         {
             services.AddMvc()
                 .AddXmlSerializerFormatters()
-                .AddJsonOptions(options =>
-                {
-                    JsonSerializerSettings settings = options.SerializerSettings;
-                    settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                    settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    settings.Formatting = Formatting.None;
-                })
+                .AddJsonOptions(JsonSerializer)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             string connectionString = Configuration.GetConnectionString("CrudConnection");
@@ -87,6 +81,25 @@ namespace Crud.API
             app.UseCors(AllowCrudOrigins);
             // app.UseHttpsRedirection();
             app.UseMvc();
+            StartMigrations<CrudContext>(app);
+        }
+
+        private void JsonSerializer(MvcJsonOptions options)
+        {
+            JsonSerializerSettings serializer = options.SerializerSettings;
+            serializer.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            serializer.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            serializer.Formatting = Formatting.None;
+        }
+
+        private void StartMigrations<TContext>(IApplicationBuilder app) where TContext : DbContext
+        {
+            IServiceScopeFactory scopeFactory = app.ApplicationServices.GetService<IServiceScopeFactory>();
+            using (IServiceScope serviceScope = scopeFactory.CreateScope())
+            {
+                TContext context = serviceScope.ServiceProvider.GetRequiredService<TContext>();
+                context.Database.Migrate();
+            }
         }
     }
 }
