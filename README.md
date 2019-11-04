@@ -20,9 +20,7 @@ donet run --project Crud.Api
 
 ### Comprobación del proyecto
 
-Ya estando en ejecución el proyecto, abrir en el browser la siguiente url: <http://localhost:5000/api/visita> (como lo indica la linea de comandos en el puerto 5000), se visualizaran una lista de datos tomados desde el API por medio de una base de datos creada anteriormente
-
-La base de datos es creada con el motor **MSSQL** y el ORM **EntityFramework Core**, está situada en la ruta:
+Ya estando en ejecución el proyecto, abrir en el browser la siguiente url: <http://localhost:5000/api/visita> (como lo indica la linea de comandos en el puerto 5000), se visualizaran una lista de datos tomados desde el API por medio de una base de datos creada automáticamente. La base de datos es creada con el motor **MSSQL** y el ORM **EntityFramework Core**, está situada en la ruta:
 
 * Crud.API/App_Data/CrudDB.mdf
-* Crud.API/App_Data/CrudDB_log.ldf**
+* Crud.API/App_Data/CrudDB_log.ldf
