@@ -24,7 +24,7 @@ Un crud sobre **"Visitas Web"**, integrando una arquitectura definida, con una A
 donet run -p Crud.API
 ```
 
->Esperar a que esté en ejecución el proyecto para luego abrir en el browser o en la app de **postman** la siguiente url: <http://localhost:5000/api/visita> (como lo indica la linea de comandos en el puerto 5000)
+>Esperar a que esté en ejecución el proyecto para luego abrir en el browser o en la app de **postman** con la siguiente url: <http://localhost:5000/api/visita> (como lo indica la linea de comandos en el puerto 5000)
 
 ### Comprobación del proyecto
 
