@@ -10,7 +10,7 @@ Un crud sobre **"Visitas Web"**, integrando una arquitectura definida, con una A
   * Instalar
 * **Visual Studio 2019 IDE** o algún editor como **"vscode"** que cumpla con el soporte de **.NET Core** y **C# 8**
 
-## Ejecución del proyecto
+### Ejecución del proyecto
 
 * Clonar proyecto con git en el ambiente local
 * Si es desde el IDE de Visual Studio:
@@ -24,7 +24,7 @@ Un crud sobre **"Visitas Web"**, integrando una arquitectura definida, con una A
 donet run -p Crud.API
 ```
 
-Esperar a que esté en ejecución el proyecto para luego abrir en el browser o en la app de **postman** la siguiente url: <http://localhost:5000/api/visita> (como lo indica la linea de comandos en el puerto 5000)
+>Esperar a que esté en ejecución el proyecto para luego abrir en el browser o en la app de **postman** la siguiente url: <http://localhost:5000/api/visita> (como lo indica la linea de comandos en el puerto 5000)
 
 ### Comprobación del proyecto
 
