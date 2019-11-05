@@ -25,6 +25,8 @@ namespace Crud.Domain
                 .IsRequired();
             builder.Property(p => p.Comentario)
                 .HasColumnType("varchar(MAX)");
+
+            builder.Seed();
         }
     }
 }

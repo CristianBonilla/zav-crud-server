@@ -10,11 +10,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using AutoMapper;
-using Autofac.Extensions.DependencyInjection;
 using Crud.Domain;
 using Autofac;
 
@@ -101,6 +101,9 @@ namespace Crud.API
             using IServiceScope serviceScope = scopeFactory.CreateScope();
             TContext context = serviceScope.ServiceProvider.GetRequiredService<TContext>();
             context.Database.Migrate();
+
+            // IRelationalDatabaseCreator databaseCreator = serviceScope.ServiceProvider.GetService<IRelationalDatabaseCreator>();
+            // databaseCreator.Exists();
         }
     }
 }

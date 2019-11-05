@@ -31,8 +31,4 @@
     <ProjectReference Include="..\Crud.Infrastructure\Crud.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
-
 </Project>
